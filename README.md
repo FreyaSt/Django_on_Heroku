@@ -112,4 +112,7 @@ Once you push your repo to heroku, it will attempt to automatically determine ho
 ## Check the Heroku logs
 You can use `heroku logs --tail` to see the logs from your application. This will expose Heroku logging messages, which feature [very helpful error codes](https://devcenter.heroku.com/articles/error-codes), and things like the stack trace for your app if it crashes.  
 
+## Common Errors
 
+1. `Error while running '$ python manage.py collectstatic --noinput'` - `django_heroku` isn't configured correctly
+2. `H14 - No web dynos running` - If you're following along, you probably need to fix your Procfile
