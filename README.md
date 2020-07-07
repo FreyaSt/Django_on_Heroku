@@ -35,7 +35,7 @@ python manage.py startapp django_app_name
 I'm using very explicit names so that your other configuration files will be self-documenting, i.e. `from django_app_name import views`
 
 ### Create a minimum viable Django app
-I will omit the full details of this step, but you will need to add a view, register your app in settings.py, and add whatever path you prefer to use. You should be able to run `python manage.py runserver` and view a page other than the default Django splash page at `localhost:8000`. This is a good time to appreciate that you just knocked out a Django application.
+I will omit the full details of this step, but you will need to add a view, register your app in settings.py, and add whatever path you prefer to use. You should be able to run `python manage.py runserver` and view a page other than the default Django splash page at `localhost:8000`. This is a good time to appreciate that you just knocked out a Django application. You can also use [this starter template](https://github.com/FreyaSt/django_starter)
 
 ## Heroku
 ======
