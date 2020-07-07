@@ -13,16 +13,15 @@ This is a short tutorial in creating and deploying a Django application on Herok
 ### Initial Environment
 Create your virtual environment, activate it, and install Django and the django-heroku dependency used in this tutorial.
 
-```python
-mkdir heroku_deploy && cd $_
-git init
-python3 -m venv venv
-source venv/bin/activate
-pip install django django-heroku
-pip freeze > requirements.txt
-git add .
-git commit -m 'Init Commit'
-```
+    mkdir heroku_deploy && cd $_
+    git init
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install django django-heroku
+    pip freeze > requirements.txt
+    git add .
+    git commit -m 'Init Commit'
+
 Once we've setup our dependencies, we create the requirements.txt file that Heroku will use to configure the app. Heroku expects one of [three possible files](https://devcenter.heroku.com/articles/deploying-python#expected-files-for-python) to manage dependencies. 
 
 
@@ -50,10 +49,10 @@ Here we start to touch upon a little Heroku magic for deploying your application
 ## Creating your Heroku application
 There is [a lot of support for deploying Python applications on Heroku](https://devcenter.heroku.com/categories/python-support), but we'll be able to accomplish this with a one to two commands.
 
-```
-heroku login
-heroku create
-```
+    ```
+    heroku login
+    heroku create
+    ```
 
 This should create a Heroku application with a randomly assigned name initialized to the current directory. You can manage your applications from the CLI or [your Heroku application dashboard](https://dashboard.heroku.com/apps).
 
