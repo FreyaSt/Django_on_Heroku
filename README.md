@@ -72,7 +72,7 @@ web: python manage.py runserver 0.0.0.0:$PORT
 You will most likely be using the [web process type](https://devcenter.heroku.com/articles/procfile#the-web-process-type) for your deployments. This is a special process type that is able to receive web traffic, and it will be responsible for running your app. I recommend starting with this Procfile for your Django application:
 
 ```
-web: python manage.y runserver 0.0.0.0:$PORT
+web: python manage.py runserver 0.0.0.0:$PORT
 ```
 
 This will use the default Django development server to launch your application bound to an address and port accessible to Heroku. You should be familiar with most of this command already. We've added two things to make it function on Heroku:
