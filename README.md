@@ -27,10 +27,8 @@ Once we've setup our dependencies, we create the requirements.txt file that Hero
 
 ### Create your Django Project and App
 
-```python
-django-admin startproject django_project_name .
-python manage.py startapp django_app_name
-```
+    django-admin startproject django_project_name .
+    python manage.py startapp django_app_name
 
 I'm using very explicit names so that your other configuration files will be self-documenting, i.e. `from django_app_name import views`
 
@@ -49,30 +47,23 @@ Here we start to touch upon a little Heroku magic for deploying your application
 ## Creating your Heroku application
 There is [a lot of support for deploying Python applications on Heroku](https://devcenter.heroku.com/categories/python-support), but we'll be able to accomplish this with a one to two commands.
 
-    ```
     heroku login
     heroku create
-    ```
 
 This should create a Heroku application with a randomly assigned name initialized to the current directory. You can manage your applications from the CLI or [your Heroku application dashboard](https://dashboard.heroku.com/apps).
 
 ## Creating your Procfile
 The second step for deploying on Heroku will be creating your Procfile. [The Procfile](https://devcenter.heroku.com/articles/procfile) is how Heroku launches your application. The basic unit of the Procfile is a process type and a command.
 
-```
-<process type>: <command>
-```
+    <process type>: <command>
 
 For example:
-```
-web: python manage.py runserver 0.0.0.0:$PORT
-```
+
+    web: python manage.py runserver 0.0.0.0:$PORT
 
 You will most likely be using the [web process type](https://devcenter.heroku.com/articles/procfile#the-web-process-type) for your deployments. This is a special process type that is able to receive web traffic, and it will be responsible for running your app. I recommend starting with this Procfile for your Django application:
 
-```
-web: python manage.py runserver 0.0.0.0:$PORT
-```
+    web: python manage.py runserver 0.0.0.0:$PORT
 
 This will use the default Django development server to launch your application bound to an address and port accessible to Heroku. You should be familiar with most of this command already. We've added two things to make it function on Heroku:
 1. We bound the address to something other than 127.0.0.1/localhost, which is not accessible from the web
@@ -83,13 +74,9 @@ These two steps allow our development server to function on the open web.
 ## Configuring `django-heroku`
 Open your `settings.py` file under `/django_project_name/` and add the following two lines: one at the top with your other imports and one near the bottom.
 
-```python
-import django_heroku
-...
-
-...
-django_heroku.settings(locals())
-```
+    import django_heroku
+    ...
+    django_heroku.settings(locals())
 
 This will configure Heroku's [django-heroku library](https://github.com/heroku/django-heroku) which magically handles some secrets, databases, and the collection of static files in the background.
 
@@ -98,11 +85,9 @@ This will configure Heroku's [django-heroku library](https://github.com/heroku/d
 ## Pushing and deploying
 I strongly recommend testing locally with `python manage.py runserver` until you are confident that the Django side of your application is locked down before deploying to Heroku. This helps you identify what is a Django issue vs. what is a Heroku config issue. Once you're ready to attempt deployment, we use git to push to heroku
 
-```
-git push heroku master
-... A lot of text will appear
-heroku open
-```
+    git push heroku master
+    ... A lot of text will appear
+    heroku open
 
 Once you push your repo to heroku, it will attempt to automatically determine how to launch your application based on available files and your Procfile configuration. Once you're done building your application, you can use `heroku open` to open your application in a new browser window! You should now either have a deployed Django application on the open web or a good place to start troubleshooting. 
 
@@ -115,3 +100,28 @@ You can use `heroku logs --tail` to see the logs from your application. This wil
 
 1. `Error while running '$ python manage.py collectstatic --noinput'` - `django_heroku` isn't configured correctly
 2. `H14 - No web dynos running` - If you're following along, you probably need to fix your Procfile
+
+
+## Moving to gunicorn
+
+Now that you've got your Django app up and running on Heroku, it's time to move off the [Django development server](https://docs.djangoproject.com/en/3.0/ref/django-admin/#runserver). Per Heroku's recommendations, we'll be using [gunicorn](https://gunicorn.org/). This switch should be pretty easy. First, we install gunicorn locally.
+
+    #Make sure your virtual env is still active
+    pip install gunicorn
+    pip freeze > requirements.txt
+    
+This will install gunicorn locally, and we create a new requirements.txt that includes our updated dependencies. Next, we'll try running gunicorn locally.
+
+    gunicorn django_project_name.wsgi
+    
+The structure of this command will match your Django project structure. It will be `gunicorn YOUR_PROJECT_NAME.wsgi` by default. Try running this locally and making sure everything is working before you push to heroku. Once you've got your page up and running locally, let's try saving it and pushing it to Heroku. First, let's update our Procfile to match the command we're going to run. Just like the local command, it should look something like this:
+
+    web: gunicorn django_project_name.wsgi
+    
+After updating our Procfile and requirements.txt, we can push to Heroku again.
+
+    git add .
+    git commit -am 'Switches from Django dev server to Gunicorn for Heroku deployment'
+    
+
+
